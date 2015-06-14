@@ -25,6 +25,7 @@ def fill_from_file(filename):
                 else:
                         value +=  line
                 last_line = line
+                
         f.close()
         return dic
 
