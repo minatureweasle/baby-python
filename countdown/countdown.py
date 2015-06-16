@@ -2,11 +2,15 @@
 #
 #plays a sound when countdown number reaches 0
 
-import time
-import argparse
+import time, argparse, pyglet
 
 def display_countdown(delta):
 	print delta
+
+def play_sound():
+	sound = pyglet.media.load('out_of_time.wav')
+	sound.play()
+	pyglet.app.run()
 
 def main():
 	
@@ -28,6 +32,8 @@ def main():
 		if (delta < last_printed_digit):
 			display_countdown(delta)
 			last_printed_digit = delta
+
+  	play_sound()
 
 
 	
