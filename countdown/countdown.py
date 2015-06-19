@@ -3,11 +3,13 @@
 #plays a sound when countdown number reaches 0
 
 import time, argparse, pyglet
+from fprint import fprint
 
 def display_countdown(delta, run_time):
-	clock_line = '|' + ('#' * (run_time - delta)) + ('-' * delta) + '|' + '[' + str(delta) + ' mins]' 
-	for i in range (60):
-		print clock_line	
+	#clock_line = '|' + ('#' * (run_time - delta)) + ('-' * delta) + '|' + '[' + str(delta) + ' mins]' 
+	#for i in range (60):
+	#	print clock_line	
+	fprint ('.')
 
 def play_sound():
 
