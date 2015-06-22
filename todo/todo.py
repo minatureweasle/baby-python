@@ -82,19 +82,26 @@ while True:
         elif 'read' in (command):
 
                 key = command.replace('read ','')
+               
                 if key in dates:
                        
-                        whole_entry = dic[key]
-                        line_width = 25
-                        lines_to_print = len(whole_entry) / line_width
+                        entry = dic[key]
+                        line_length = 50
+                        lines_to_print = len(entry) / line_length
 
                         for i in range(lines_to_print):
-                            entry_line = whole_entry[:25]
-                            whole_entry = whole_entry[25:]
-                            print entry_line
-                       
-                        if (whole_entry):
-                            print whole_entry
+                            
+                            line = entry[:line_length]
+                            entry = entry[line_length:]
+                            
+                            while (len(entry) != 0 and line[len(line) - 1] != ' '):
+                                line += entry[:1]
+                                entry = entry[1:]
+                                
+                            print line
+
+                        if (entry):
+                            print entry
 
                 else:
                         print 'no entry found'
@@ -111,7 +118,6 @@ while True:
         elif 'delete' in (command):
 
                 date = command.replace('delete ','')
-
                 if date in dates:
                         del dic[date]
                       
@@ -120,8 +126,8 @@ while True:
                 f = open('todo.txt','w')
 
                 for i in range(nbr_dates):
-                        f.write(dates[i].replace('\n', '') + '\n')
-                        f.write(entries[i].replace('\n', '') +'\n')
+                        f.write(dates[i].rstrip('\n') + '\n')
+                        f.write(entries[i].rstrip('\n') +'\n')
                         f.write('-\n')
                 f.close()
 
