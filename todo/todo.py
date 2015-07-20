@@ -6,7 +6,7 @@ def display(nbr_dates, dates):
     entries_left = 0
     last_line = ''
     
-    print ''      
+    print      
 
     if (nbr_dates % 3 == 1):
         nbr_dates -= 1
@@ -23,11 +23,13 @@ def display(nbr_dates, dates):
     for i in range (entries_left,0,-1):
         last_line += '{0:10} | '.format(dates[len(dates)-i])
 
-    if (last_line):
+   # if (last_line):
         print last_line
 
     if (len(dic) == 0):
         print '<no entries>'
+
+    print 
 
 def fill_from_file(filename):
         """reads text file contents into a dictionary"""
@@ -58,10 +60,29 @@ def fill_from_file(filename):
         f.close()
 
         return dic
+print ('TODO: YOUR OWN THING')
+success = False
 
-dic = fill_from_file('todo.txt')
+while (success == False):
+    filename  = raw_input('-> ')
+
+    file_exists = False
+
+    if (filename in 'jan'):
+        file_exists = True
+
+    elif (filename in 'feb'):  
+        file_exists = True
+
+    if (file_exists):
+        dic = fill_from_file(filename + '.txt')
+        success = True;
+
 
 while True:
+    
+
+        print ( filename+ ' 2015 JACOB GOLDBERG \n')
 
         dates = dic.keys()
         entries = dic.values()
@@ -76,20 +97,21 @@ while True:
                 except:
                     return 0
 
-               dates.sort(key= compare_dates, reverse=True)
+               dates.sort(key=compare_dates, reverse=True)
                display(nbr_dates, dates)
                                      
         elif 'read' in (command):
+
+                print
 
                 key = command.replace('read ','')
                
                 if key in dates:
                        
-                        entry = dic[key]
+                        entry = dic[key].rstrip('\n')
                         line_length = 50
-                        lines_to_print = len(entry) / line_length
 
-                        for i in range(lines_to_print):
+                        while (entry.strip()):
                             
                             line = entry[:line_length]
                             entry = entry[line_length:]
@@ -100,11 +122,10 @@ while True:
                                 
                             print line
 
-                        if (entry):
-                            print entry
-
                 else:
                         print 'no entry found'
+
+                print
                         
         elif command in ('add', 'a'):
 
@@ -129,8 +150,8 @@ while True:
                         f.write(dates[i].rstrip('\n') + '\n')
                         f.write(entries[i].rstrip('\n') +'\n')
                         f.write('-\n')
+                
                 f.close()
-
                 quit()
 
         elif command in ('total_entries', 'te', 't'):
