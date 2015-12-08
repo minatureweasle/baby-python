@@ -1,3 +1,2 @@
 # baby-python
-
-baby level python programming exercises
+simple python programming exercises
