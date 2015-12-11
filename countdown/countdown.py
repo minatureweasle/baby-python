@@ -4,8 +4,9 @@
 import time, argparse, pyglet
 from fprint import fprint
 
-def display_countdown(delta, run_time):	
-	fprint ('.')
+def seconds_left(now, last_time):	
+	if int(last_time) - int(now) > 0:
+		print int(now)
 
 def play_sound():
 	sound = pyglet.media.load('clock-tick2.wav')
@@ -25,8 +26,12 @@ def main():
 		completion_time = time.time() + (args.minutes * 60) 
 	else:
 		completion_time = time.time()
+	
+	previous_time = completion_time - time.time()	 
 	while time.time() <= completion_time:
-		print completion_time - time.time()
+		now = completion_time - time.time()
+		seconds_left(now, previous_time)
+		previous_time = now 
   	play_sound()
 	
 if (__name__=='__main__'):
