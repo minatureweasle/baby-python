@@ -1,2 +1,2 @@
-# baby-python
-simple python programming exercises
+# simple task organizer
+
