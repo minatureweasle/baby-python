@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="db01415f-a1cf-42dd-a934-0eabba698a58" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countdown/clock-tick2.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countdown/commandline.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countdown/countdown.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countdown/fprint.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/countdown/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo/display_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo/feb.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo/jan.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo/todo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo/todo.txt" beforeDir="false" />
-    </list>
+    <list default="true" id="db01415f-a1cf-42dd-a934-0eabba698a58" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,26 +43,6 @@
         </counts>
       </usages-collector>
     </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/todo/lifelog.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-219">
-              <caret line="1" column="39" selection-start-line="1" selection-start-column="39" selection-end-line="1" selection-end-column="39" />
-              <folding>
-                <element signature="e#55#69#0" expanded="true" />
-                <element signature="e#116#267#0" expanded="true" />
-                <element signature="e#289#512#0" expanded="true" />
-                <element signature="e#356#489#0" expanded="true" />
-                <element signature="e#538#706#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -148,7 +116,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-2" width="1370" height="740" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24963397" />
