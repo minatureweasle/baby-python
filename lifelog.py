@@ -1,6 +1,7 @@
 """
 Log your life? No, just the little important things we tend to forget...
 """
+import math
 import sqlite3
 import sys
 import time
@@ -35,11 +36,40 @@ def lifelog(conn):
     return lifelog
 
 
+def read(entry_datetime, entry_text):
+    """Read an entry 100 characters at a time"""
+    print(' ' * 45, end='')
+    print(
+        entry_datetime.tm_year,
+        entry_datetime.tm_mon,
+        entry_datetime.tm_mday,
+        sep='-',
+        end=''
+    )
+    print(' ' * 45)
+    pos = 0
+    while pos < len(entry_text):
+        end = min(pos+100, len(entry_text))
+        print(entry[pos:end])
+        pos = end
+
+
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        save(input())
+    if len(sys.argv) > 1 and '^' in sys.argv[1]:
+        lifelog = lifelog(db_conn())
+        datetimes_sorted = sorted(lifelog.keys(), reverse=True)
+        nbr_entries_back = sys.argv[1].count('^') - 1
+        if len(datetimes_sorted) <= nbr_entries_back:
+            sys.exit(0)
+        datetime = datetimes_sorted[nbr_entries_back]
+        entry = lifelog[datetimes_sorted[nbr_entries_back]]
+        read(datetime, entry)
+
     if len(sys.argv) > 1 and sys.argv[1] == 'list':
         lifelog = lifelog(db_conn())
         for datetime in sorted(lifelog.keys(), reverse=True):
-            print(datetime.tm_year, datetime.tm_mon, datetime.tm_mday, end=': ')
-            print(lifelog[datetime][:55], '...', sep='')
+            print(datetime.tm_year, datetime.tm_mon, datetime.tm_mday, sep='-', end=': ')
+            print(lifelog[datetime][:100], '...', sep='')
+
+    if len(sys.argv) == 1:
+        save(str(input()))
