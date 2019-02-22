@@ -5,7 +5,10 @@ import math
 import sqlite3
 import sys
 import time
+from collections import OrderedDict
+from itertools import islice
 
+DB_FILE = 'lldb'
 
 def save(entry):
     """Persist a log entry"""
@@ -16,8 +19,9 @@ def save(entry):
 
 
 def db_conn():
-    """Connect to a database and setup table if required"""
-    conn = sqlite3.connect('lldb')
+    """Connect to the database"""
+    conn = sqlite3.connect(DB_FILE)
+    # setup if required
     conn.cursor().execute((
         'create table if not exists log'
         '(id integer primary key autoincrement, '
@@ -28,7 +32,7 @@ def db_conn():
 
 
 def lifelog(conn):
-    """Extract our lifelog from the db into memory"""
+    """Load `lifelog` from the db into memory"""
     lifelog = {}
     cur = conn.execute('select * from log')
     for _, datetime, entry in cur.fetchall():
@@ -36,13 +40,27 @@ def lifelog(conn):
     return lifelog
 
 
-def read(entry_datetime, entry_text):
-    """Read an entry 100 characters at a time"""
+def order(lifelog):
+    """Orders `lifelog` making it far easier to query"""
+    return OrderedDict(reversed(list(lifelog.items())))
+
+
+def list_display(lifelog):
+    """Preview display of all `lifelog` entries"""
+    for datetime, entry in lifelog.items():
+        print(datetime.tm_year, datetime.tm_mon, datetime.tm_mday, datetime.tm_hour, datetime.tm_min, sep='-', end=': ')
+        print(lifelog[datetime][:100], '...', sep='')
+
+
+def detail_display(entry_datetime, entry_text):
+    """Detail display of a single `lifelog` entry"""
     print(' ' * 45, end='')
     print(
         entry_datetime.tm_year,
         entry_datetime.tm_mon,
         entry_datetime.tm_mday,
+        entry_datetime.tm_hour,
+        entry_datetime.tm_min,
         sep='-',
         end=''
     )
@@ -50,26 +68,20 @@ def read(entry_datetime, entry_text):
     pos = 0
     while pos < len(entry_text):
         end = min(pos+100, len(entry_text))
-        print(entry[pos:end])
+        print(entry_text[pos:end])
         pos = end
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and '^' in sys.argv[1]:
-        lifelog = lifelog(db_conn())
-        datetimes_sorted = sorted(lifelog.keys(), reverse=True)
-        nbr_entries_back = sys.argv[1].count('^') - 1
-        if len(datetimes_sorted) <= nbr_entries_back:
-            sys.exit(0)
-        datetime = datetimes_sorted[nbr_entries_back]
-        entry = lifelog[datetimes_sorted[nbr_entries_back]]
-        read(datetime, entry)
+        lifelog = order(lifelog(db_conn()))
+        entry_nbr = sys.argv[1].count('^') - 1
+        datetime = (next(islice(lifelog.items(), entry_nbr, None)))[0]
+        print(datetime)
+        detail_display(datetime, lifelog[datetime])
 
     if len(sys.argv) > 1 and sys.argv[1] == 'list':
-        lifelog = lifelog(db_conn())
-        for datetime in sorted(lifelog.keys(), reverse=True):
-            print(datetime.tm_year, datetime.tm_mon, datetime.tm_mday, sep='-', end=': ')
-            print(lifelog[datetime][:100], '...', sep='')
+        list_display(order(lifelog(db_conn())))
 
     if len(sys.argv) == 1:
         save(str(input()))
