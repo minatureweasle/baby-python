@@ -8,7 +8,12 @@ import time
 from collections import OrderedDict
 from itertools import islice
 
-DB_FILE = 'lldb'
+from pathlib import Path
+
+DB_NAME = 'lldb'
+DB_FILE = str(Path(__file__).resolve().parent / DB_NAME)
+print(DB_FILE)
+
 
 def save(entry):
     """Persist a log entry"""
@@ -17,6 +22,11 @@ def save(entry):
     conn.execute(sql.format(entry))
     conn.commit()
 
+
+def escape_special_characters(entry):
+    """Escape sqlite special characters"""
+    # for now just '
+    return entry.replace("'","''")
 
 def db_conn():
     """Connect to the database"""
@@ -73,14 +83,19 @@ def detail_display(entry_datetime, entry_text):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and sys.argv[1] == 'list':
+        list_display(order(lifelog(db_conn())))
+
+    if len(sys.argv) == 1:
+        save(
+            escape_special_characters(
+                str(input())
+            )
+        )
+
     if len(sys.argv) > 1 and '^' in sys.argv[1]:
         lifelog = order(lifelog(db_conn()))
         entry_nbr = sys.argv[1].count('^') - 1
         datetime = (next(islice(lifelog.items(), entry_nbr, None)))[0]
         detail_display(datetime, lifelog[datetime])
 
-    if len(sys.argv) > 1 and sys.argv[1] == 'list':
-        list_display(order(lifelog(db_conn())))
-
-    if len(sys.argv) == 1:
-        save(str(input()))
