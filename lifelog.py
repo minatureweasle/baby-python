@@ -6,10 +6,13 @@ import sqlite3
 import sys
 import time
 from collections import OrderedDict
+from datetime import datetime
 from itertools import islice
+from time import mktime
 
 from pathlib import Path
 
+TIME_FORMAT = '%Y-%m-%d %H:%M'
 DB_NAME = 'lldb'
 DB_FILE = str(Path(__file__).resolve().parent / DB_NAME)
 print(DB_FILE)
@@ -45,36 +48,31 @@ def lifelog(conn):
     """Load `lifelog` from the db into memory"""
     lifelog = {}
     cur = conn.execute('select * from log')
-    for _, datetime, entry in cur.fetchall():
-        lifelog[time.gmtime(datetime)] = entry
+    for _, seconds_since_epoch, entry in cur.fetchall():
+        time_struct = time.gmtime(seconds_since_epoch)
+        date_time = datetime.fromtimestamp(mktime(time_struct))
+        lifelog[date_time] = entry
     return lifelog
 
 
 def order(lifelog):
     """Orders `lifelog` making it far easier to query"""
-    return OrderedDict(reversed(list(lifelog.items())))
+    return OrderedDict(list(lifelog.items()))
 
 
 def list_display(lifelog):
     """Preview display of all `lifelog` entries"""
     for datetime, entry in lifelog.items():
-        print(datetime.tm_year, datetime.tm_mon, datetime.tm_mday, datetime.tm_hour, datetime.tm_min, sep='-', end=': ')
+        print(datetime.strftime(TIME_FORMAT), end=': ')
         print(lifelog[datetime][:100], '...', sep='')
 
 
 def detail_display(entry_datetime, entry_text):
     """Detail display of a single `lifelog` entry"""
     print(' ' * 45, end='')
-    print(
-        entry_datetime.tm_year,
-        entry_datetime.tm_mon,
-        entry_datetime.tm_mday,
-        entry_datetime.tm_hour,
-        entry_datetime.tm_min,
-        sep='-',
-        end=''
-    )
+    print(entry_datetime.strftime(TIME_FORMAT))
     print(' ' * 45)
+
     pos = 0
     while pos < len(entry_text):
         end = min(pos+100, len(entry_text))
