@@ -29,7 +29,8 @@ def save(entry):
 def escape_special_characters(entry):
     """Escape sqlite special characters"""
     # for now just '
-    return entry.replace("'","''")
+    return entry.replace("'", "''")
+
 
 def db_conn():
     """Connect to the database"""
@@ -55,9 +56,14 @@ def lifelog(conn):
     return lifelog
 
 
-def order(lifelog):
-    """Orders `lifelog` making it far easier to query"""
+def order_asc(lifelog):
+    """Orders `lifelog` ASC making it far easier to query"""
     return OrderedDict(list(lifelog.items()))
+
+
+def order_desc(lifelog):
+    """Orders `lifelog` DESC making it far easier to query"""
+    return OrderedDict(reversed(list(lifelog.items())))
 
 
 def list_display(lifelog):
@@ -75,14 +81,14 @@ def detail_display(entry_datetime, entry_text):
 
     pos = 0
     while pos < len(entry_text):
-        end = min(pos+100, len(entry_text))
+        end = min(pos + 100, len(entry_text))
         print(entry_text[pos:end])
         pos = end
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'list':
-        list_display(order(lifelog(db_conn())))
+        list_display(order_asc(lifelog(db_conn())))
 
     if len(sys.argv) == 1:
         save(
@@ -92,8 +98,7 @@ if __name__ == '__main__':
         )
 
     if len(sys.argv) > 1 and '^' in sys.argv[1]:
-        lifelog = order(lifelog(db_conn()))
+        lifelog = order_desc(lifelog(db_conn()))
         entry_nbr = sys.argv[1].count('^') - 1
         datetime = (next(islice(lifelog.items(), entry_nbr, None)))[0]
         detail_display(datetime, lifelog[datetime])
-
